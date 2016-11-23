@@ -1,7 +1,7 @@
 {
     "name": "aishan/lumen-captcha",
     "description": "captcha for lumen",
-    "keywords": ["lumen Captcha", "lumen Security", "Captcha"],
+    "keywords": ["lumen Captcha", "lumen Security", "Captcha for api"],
     "type": "library",
     "license": "MIT",
     "authors": [
