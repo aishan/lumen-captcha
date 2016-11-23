@@ -212,9 +212,10 @@ class Captcha //extends Captcha
             $bag .= $characters[rand(0, count($characters) - 1)];
         }
         $captchaId = 'captcha_'.$captchaId;
-        Cache::put($captchaId,$bag,5);
-        \Log::debug('存入captcha：'.$captchaId.'    -----'.$bag);
-        \Log::debug('实际存入captcha：'.Cache::get($captchaId));
+        //缓存时间
+        $captchaConf = config('captcha');
+        $cacheTime = isset($captchaConf['useful_time']) ? $captchaConf['useful_time'] : 5;
+        Cache::put($captchaId,$bag,$cacheTime);
         return $bag;
     }
 
@@ -286,7 +287,6 @@ class Captcha //extends Captcha
     function checkCaptchaById($value,$captchaId)
     {
         $captcha = 'captcha_'.$captchaId;
-        \Log::debug('取出captcha：'.$captcha.'    -----'.Cache::get($captcha));
         if(!Cache::has($captcha))
         {
             return false;
