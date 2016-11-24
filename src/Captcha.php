@@ -293,13 +293,16 @@ class Captcha //extends Captcha
             return false;
         }
         $key = Cache::get($captcha);
-        Cache::forget($captcha);
-        if($this->sensitive){
-            return $value == $key;
-        }else{
-            return strtolower($value) == strtolower($key);
+        if(!$this->sensitive){
+            $value = strtolower($value);
+            $key = strtolower($key);
         }
-
+        if($value == $key){
+            Cache::forget($captcha);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
