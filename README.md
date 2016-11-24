@@ -19,7 +19,7 @@ or
 {
     "require": {
         "laravel/lumen-framework": "5.3.*",
-        "aishan/lumen-captcha": "v1.1"
+        "aishan/lumen-captcha": "v1.2"
     },
     "minimum-stability": "dev"
 }
