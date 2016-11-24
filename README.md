@@ -19,7 +19,7 @@ or
 {
     "require": {
         "laravel/lumen-framework": "5.3.*",
-        "aishan/lumen-captcha": "master"
+        "aishan/lumen-captcha": "v1.1"
     },
     "minimum-stability": "dev"
 }
@@ -89,6 +89,7 @@ public function checkCaptcha(Request $request, $type = 'default',$captchaUuid)
         ...
     }
 ```
+
 
 ## Links
 * [Intervention Image](https://github.com/Intervention/image)
