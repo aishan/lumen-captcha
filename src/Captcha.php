@@ -146,6 +146,7 @@ class Captcha //extends Captcha
      */
     protected $sensitive = false;
 
+    protected $captchaConf;
     /**
      * Constructor
      *
@@ -165,12 +166,14 @@ class Captcha //extends Captcha
         Str $str
     )
     {
+        $this->captchaConf = config('captcha');//加载配置
+        $this->sensitive = isset($this->captchaConf['sensitive']) ? $this->captchaConf['sensitive'] : false;
         $this->files = $files;
         $this->config = $config;
         $this->imageManager = $imageManager;
         $this->hasher = $hasher;
         $this->str = $str;
-        $this->characters = env('CAPTCHA_CHARACTERS','2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ');
+        $this->characters = isset($this->captchaConf['captcha_characters']) ? $this->captchaConf['captcha_characters'] : '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ';
     }
 
     /**
@@ -179,10 +182,9 @@ class Captcha //extends Captcha
      */
     protected function configure($config)
     {
-        $captchaConf = config('captcha');
-        if (!empty($captchaConf) && isset($captchaConf[$config]))
+        if (!empty($this->captchaConf) && isset($this->captchaConf[$config]))
         {
-            foreach($captchaConf[$config] as $key => $val)
+            foreach($this->captchaConf[$config] as $key => $val)
             {
                 $this->{$key} = $val;
             }
@@ -213,8 +215,7 @@ class Captcha //extends Captcha
         }
         $captchaId = 'captcha_'.$captchaId;
         //缓存时间
-        $captchaConf = config('captcha');
-        $cacheTime = isset($captchaConf['useful_time']) ? $captchaConf['useful_time'] : 5;
+        $cacheTime = isset($this->captchaConf['useful_time']) ? $this->captchaConf['useful_time'] : 5;
         Cache::put($captchaId,$bag,$cacheTime);
         return $bag;
     }
@@ -293,7 +294,12 @@ class Captcha //extends Captcha
         }
         $key = Cache::get($captcha);
         Cache::forget($captcha);
-        return $value == $key;
+        if($this->sensitive){
+            return $value == $key;
+        }else{
+            return strtolower($value) == strtolower($key);
+        }
+
     }
 
     /**
